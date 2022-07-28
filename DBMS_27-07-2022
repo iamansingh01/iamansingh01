@@ -1,0 +1,216 @@
+ubuntu@ubuntu-OptiPlex-5000:~$ mysql -u root -p
+Enter password: 
+ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+ubuntu@ubuntu-OptiPlex-5000:~$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.29-0ubuntu0.22.04.2 (Ubuntu)
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| BankAccDetails     |
+| Books              |
+| Employee           |
+| MCU                |
+| database1          |
+| emp                |
+| information_schema |
+| movies             |
+| mysql              |
+| performance_schema |
+| personal_info      |
+| sanika             |
+| shriniket          |
+| snk                |
+| snk1               |
+| stu_info           |
+| students           |
+| sys                |
++--------------------+
+18 rows in set (0.01 sec)
+
+mysql> create database helloDBMS;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show databases
+    -> show databases;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'show databases' at line 2
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| BankAccDetails     |
+| Books              |
+| Employee           |
+| MCU                |
+| database1          |
+| emp                |
+| helloDBMS          |
+| information_schema |
+| movies             |
+| mysql              |
+| performance_schema |
+| personal_info      |
+| sanika             |
+| shriniket          |
+| snk                |
+| snk1               |
+| stu_info           |
+| students           |
+| sys                |
++--------------------+
+19 rows in set (0.00 sec)
+
+mysql> use helloDBMS;
+Database changed
+mysql> create table student_details(roll_no int, age int, city varchar(20), per float);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into student_details values (1, "Aditya", 19, "Pune", 95.20);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> drop student_details;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'student_details' at line 1
+mysql> drop table student_details;
+Query OK, 0 rows affected (0.03 sec)
+mysql> create table student_details(roll_no int,name varchar(30), age int, city varchar(20), per float);
+Query OK, 0 rows affected (0.02 sec)
+mysql> insert into student_details values (1, "Aditya", 19, "Pune", 95.20);
+Query OK, 1 row affected (0.03 sec)
+mysql> insert into student_details values (2, "Amisha", 20, "Mumbai", 70);
+Query OK, 1 row affected (0.02 sec)
+mysql> insert into student_details values 2, "Chinmay", 20, "Mumbai", 70);
+[1]+  Stopped                 mysql -u root -p
+ubuntu@ubuntu-OptiPlex-5000:~$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.29-0ubuntu0.22.04.2 (Ubuntu)
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+mysql> use helloDBMS
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+Database changed
+mysql> insert into student_details values (3, "Chinmay", 20, "Mumbai", 90);
+Query OK, 1 row affected (0.03 sec)
+mysql> select * from student_details;
++---------+---------+------+--------+------+
+| roll_no | name    | age  | city   | per  |
++---------+---------+------+--------+------+
+|       1 | Aditya  |   19 | Pune   | 95.2 |
+|       2 | Amisha  |   20 | Mumbai |   70 |
+|       3 | Chinmay |   20 | Mumbai |   90 |
++---------+---------+------+--------+------+
+3 rows in set (0.00 sec)
+mysql> alter table student_details add mobile int(10);
+Query OK, 0 rows affected, 1 warning (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+mysql> select * from student_details;
++---------+---------+------+--------+------+--------+
+| roll_no | name    | age  | city   | per  | mobile |
++---------+---------+------+--------+------+--------+
+|       1 | Aditya  |   19 | Pune   | 95.2 |   NULL |
+|       2 | Amisha  |   20 | Mumbai |   70 |   NULL |
+|       3 | Chinmay |   20 | Mumbai |   90 |   NULL |
++---------+---------+------+--------+------+--------+
+3 rows in set (0.00 sec)
+mysql> alter table student_details drop column mobile;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+mysql> alter table student_details drop mobile;
+ERROR 1091 (42000): Can't DROP 'mobile'; check that column/key exists
+mysql> alter table student_details add mobile int(10);
+Query OK, 0 rows affected, 1 warning (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> alter table student_details drop mobile;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table student_details rename column mobile to Mobile_no;
+ERROR 1054 (42S22): Unknown column 'mobile' in 'student_details'
+mysql> alter table student_details add mobile int(10);
+Query OK, 0 rows affected, 1 warning (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> alter table student_details rename column mobile to Mobile_no;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from student_details;
++---------+---------+------+--------+------+-----------+
+| roll_no | name    | age  | city   | per  | Mobile_no |
++---------+---------+------+--------+------+-----------+
+|       1 | Aditya  |   19 | Pune   | 95.2 |      NULL |
+|       2 | Amisha  |   20 | Mumbai |   70 |      NULL |
+|       3 | Chinmay |   20 | Mumbai |   90 |      NULL |
++---------+---------+------+--------+------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> alter table student_details modify column roll_no varchar(20);
+Query OK, 3 rows affected (0.05 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from student_details;
++---------+---------+------+--------+------+-----------+
+| roll_no | name    | age  | city   | per  | Mobile_no |
++---------+---------+------+--------+------+-----------+
+| 1       | Aditya  |   19 | Pune   | 95.2 |      NULL |
+| 2       | Amisha  |   20 | Mumbai |   70 |      NULL |
+| 3       | Chinmay |   20 | Mumbai |   90 |      NULL |
++---------+---------+------+--------+------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> update student_details set Mobile_no = 9527981598 where roll_no = 1;
+ERROR 1264 (22003): Out of range value for column 'Mobile_no' at row 1
+mysql> alter table student_details modify column Mobile_no varchar(20);
+Query OK, 3 rows affected (0.05 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> update student_details set Mobile_no = 9527981598 where roll_no = 1;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student_details;
++---------+---------+------+--------+------+------------+
+| roll_no | name    | age  | city   | per  | Mobile_no  |
++---------+---------+------+--------+------+------------+
+| 1       | Aditya  |   19 | Pune   | 95.2 | 9527981598 |
+| 2       | Amisha  |   20 | Mumbai |   70 | NULL       |
+| 3       | Chinmay |   20 | Mumbai |   90 | NULL       |
++---------+---------+------+--------+------+------------+
+3 rows in set (0.00 sec)
+
+mysql> delete from student_details where roll_no = 1;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from student_details;
++---------+---------+------+--------+------+-----------+
+| roll_no | name    | age  | city   | per  | Mobile_no |
++---------+---------+------+--------+------+-----------+
+| 2       | Amisha  |   20 | Mumbai |   70 | NULL      |
+| 3       | Chinmay |   20 | Mumbai |   90 | NULL      |
++---------+---------+------+--------+------+-----------+
+2 rows in set (0.01 sec)
+
+mysql> delete student_details;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> delete from student_details;
+Query OK, 2 rows affected (0.02 sec)
+
+mysql> select * from student_details;
+Empty set (0.00 sec)
