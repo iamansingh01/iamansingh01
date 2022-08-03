@@ -1,0 +1,106 @@
+
+mysql> create database store;
+Query OK, 1 row affected (0.09 sec)
+
+mysql> use store;
+Database changed
+mysql> create table items(item_no int,item_name varchar(20),item_price int);
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> insert into items values(01,"Maggie",100),(02,"Candies",20),(03,"Chocolates",30);
+Query OK, 3 rows affected (0.12 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select *from items;
++---------+------------+------------+
+| item_no | item_name  | item_price |
++---------+------------+------------+
+|       1 | Maggie     |        100 |
+|       2 | Candies    |         20 |
+|       3 | Chocolates |         30 |
++---------+------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> alter table items add item_comp varchar(20);
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select *from items;
++---------+------------+------------+-----------+
+| item_no | item_name  | item_price | item_comp |
++---------+------------+------------+-----------+
+|       1 | Maggie     |        100 | NULL      |
+|       2 | Candies    |         20 | NULL      |
+|       3 | Chocolates |         30 | NULL      |
++---------+------------+------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> alter table items rename column item_price to item_cost;
+Query OK, 0 rows affected (0.42 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select *from items;
++---------+------------+-----------+-----------+
+| item_no | item_name  | item_cost | item_comp |
++---------+------------+-----------+-----------+
+|       1 | Maggie     |       100 | NULL      |
+|       2 | Candies    |        20 | NULL      |
+|       3 | Chocolates |        30 | NULL      |
++---------+------------+-----------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> drop table items drop column item_comp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'drop column item_comp' at line 1
+mysql> alter table items drop column item_comp;
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select *from items;
++---------+------------+-----------+
+| item_no | item_name  | item_cost |
++---------+------------+-----------+
+|       1 | Maggie     |       100 |
+|       2 | Candies    |        20 |
+|       3 | Chocolates |        30 |
++---------+------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> update items set item_cost =10 where item_no=1;
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select *from items;
++---------+------------+-----------+
+| item_no | item_name  | item_cost |
++---------+------------+-----------+
+|       1 | Maggie     |        10 |
+|       2 | Candies    |        20 |
+|       3 | Chocolates |        30 |
++---------+------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> delete from items where item_no=3;
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select *from items;
++---------+-----------+-----------+
+| item_no | item_name | item_cost |
++---------+-----------+-----------+
+|       1 | Maggie    |        10 |
+|       2 | Candies   |        20 |
++---------+-----------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> alter table items drop row where item_no=2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'row where item_no=2' at line 1
+mysql> delete from items where item_no=2;
+Query OK, 1 row affected (0.08 sec)
+
+mysql> select *from items;
++---------+-----------+-----------+
+| item_no | item_name | item_cost |
++---------+-----------+-----------+
+|       1 | Maggie    |        10 |
++---------+-----------+-----------+
+1 row in set (0.00 sec)
+
