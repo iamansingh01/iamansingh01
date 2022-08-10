@@ -1,0 +1,105 @@
+mysql> create database employee2;
+Query OK, 1 row affected (0.14 sec)
+
+mysql> use employee2;
+Database changed
+mysql> create table emp(emp_id int ,emp_name varchar(10),emp_sal int);
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> insert into emp values(01,"Aman",8000),(02,"Ansh",4000),(03,"Kavita",5000),(04,"Kalp",6000);
+Query OK, 4 rows affected (0.20 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select *from emp;
++--------+----------+---------+
+| emp_id | emp_name | emp_sal |
++--------+----------+---------+
+|      1 | Aman     |    8000 |
+|      2 | Ansh     |    4000 |
+|      3 | Kavita   |    5000 |
+|      4 | Kalp     |    6000 |
++--------+----------+---------+
+4 rows in set (0.08 sec)
+
+mysql> select count(emp_id) from emp;
++---------------+
+| count(emp_id) |
++---------------+
+|             4 |
++---------------+
+1 row in set (0.07 sec)
+
+mysql> select count(emp_id) from emp where emp_sal>4000;
++---------------+
+| count(emp_id) |
++---------------+
+|             3 |
++---------------+
+1 row in set (0.10 sec)
+
+mysql> select count(emp_id),emp_name from emp group by emp_name having(emp_sal)>3000;
+ERROR 1054 (42S22): Unknown column 'emp_sal' in 'having clause'
+mysql> select count(emp_id),emp_name from emp group by emp_name where emp_sal>3000;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where emp_sal>3000' at line 1
+mysql> select count(emp_id),emp_name from emp group by emp_name having count(emp_sal)>3000;
+Empty set (0.09 sec)
+
+mysql> insert into emp values(03,"Aanandi",4000),(04,"Shweta",4000);
+Query OK, 2 rows affected (0.09 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select count(emp_id),emp_name from emp group by emp_name having count(emp_id)>0;
++---------------+----------+
+| count(emp_id) | emp_name |
++---------------+----------+
+|             1 | Aman     |
+|             1 | Ansh     |
+|             1 | Kavita   |
+|             1 | Kalp     |
+|             1 | Aanandi  |
+|             1 | Shweta   |
++---------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> select count(emp_id),emp_sal from emp group by emp_sal having count(emp_id)>0;
++---------------+---------+
+| count(emp_id) | emp_sal |
++---------------+---------+
+|             1 |    8000 |
+|             3 |    4000 |
+|             1 |    5000 |
+|             1 |    6000 |
++---------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select sum(emp_sal) from emp;
++--------------+
+| sum(emp_sal) |
++--------------+
+|        31000 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(emp_sal) from emp;
++--------------+
+| avg(emp_sal) |
++--------------+
+|    5166.6667 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select min(emp_sal) from emp;
++--------------+
+| min(emp_sal) |
++--------------+
+|         4000 |
++--------------+
+1 row in set (0.02 sec)
+
+mysql> select max(emp_sal) from emp;
++--------------+
+| max(emp_sal) |
++--------------+
+|         8000 |
++--------------+
+1 row in set (0.00 sec)
