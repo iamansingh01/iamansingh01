@@ -1,0 +1,28 @@
+
+mysql> insert into details values(1,"Aman","Jammu",90),(2,"Aanandi","Jammu",95),(3,"Tushar","Pune",80).(4,"Saniya","Mumbai",90);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.(4,"Saniya","Mumbai",90)' at line 1
+mysql> insert into details values(1,"Aman","Jammu",90),(2,"Aanandi","Jammu",95),(3,"Tushar","Pune",80),(4,"Saniya","Mumbai",90);
+Query OK, 4 rows affected (0.03 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select *from details;
++---------+----------+--------+-------+
+| roll_no | std_name | city   | marks |
++---------+----------+--------+-------+
+|       1 | Aman     | Jammu  |    90 |
+|       2 | Aanandi  | Jammu  |    95 |
+|       3 | Tushar   | Pune   |    80 |
+|       4 | Saniya   | Mumbai |    90 |
++---------+----------+--------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select *from details where city=(select city from details where std_name="Aman");
++---------+----------+-------+-------+
+| roll_no | std_name | city  | marks |
++---------+----------+-------+-------+
+|       1 | Aman     | Jammu |    90 |
+|       2 | Aanandi  | Jammu |    95 |
++---------+----------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> ^C
