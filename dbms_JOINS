@@ -1,3 +1,4 @@
+mysql>create database shop;
 mysql> use shop;
 Database changed
 
