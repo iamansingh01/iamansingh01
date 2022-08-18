@@ -1,0 +1,72 @@
+mysql> create database students;
+Query OK, 1 row affected (0.88 sec)
+
+mysql> use students;
+Database changed
+mysql> create table details(roll_no int, std_name varchar(20), city varchar(10));
+Query OK, 0 rows affected (0.63 sec)
+
+mysql> insert into details values(01,"Aman","Jammu"),(02,"Aanandi","Jammmu"),(03,"Tushar","Pune"),(04,"Saniya","Mumbai");
+Query OK, 4 rows affected (0.14 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select *from details;
++---------+----------+--------+
+| roll_no | std_name | city   |
++---------+----------+--------+
+|       1 | Aman     | Jammu  |
+|       2 | Aanandi  | Jammmu |
+|       3 | Tushar   | Pune   |
+|       4 | Saniya   | Mumbai |
++---------+----------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select *from details where city=(select city from details where std_name="Aman");
++---------+----------+-------+
+| roll_no | std_name | city  |
++---------+----------+-------+
+|       1 | Aman     | Jammu |
++---------+----------+-------+
+1 row in set (0.08 sec)
+
+mysql> update details set city="Jammu" where roll_no=2;
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select *from details where city=(select city from details where std_name="Aman");
++---------+----------+-------+
+| roll_no | std_name | city  |
++---------+----------+-------+
+|       1 | Aman     | Jammu |
+|       2 | Aanandi  | Jammu |
++---------+----------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select std_name from details where roll_no in (select std_name from details where city="Jammu");
+Empty set, 2 warnings (0.11 sec)
+
+mysql> select std_name from details where roll_no in (select roll_no from details where city="Jammu");
++----------+
+| std_name |
++----------+
+| Aman     |
+| Aanandi  |
++----------+
+2 rows in set (0.00 sec)
+
+mysql> select std_name from details where roll_no not in (select roll_no from details where city="Jammu");
++----------+
+| std_name |
++----------+
+| Tushar   |
+| Saniya   |
++----------+
+2 rows in set (0.08 sec)
+
+mysql> select std_name from details where roll_no>ALL (select roll_no from details where city="Pune");
++----------+
+| std_name |
++----------+
+| Saniya   |
++----------+
+1 row in set (0.06 sec)
