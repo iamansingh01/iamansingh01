@@ -1,0 +1,178 @@
+mysql> use shop;
+Database changed
+
+mysql> create table Orders(order_id int ,customer_id int ,order_date varchar(10));
+Query OK, 0 rows affected (0.14 sec)
+
+mysql> insert into Orders values(101,2,"10-08-22"),(102,3,"11-08-22"),(103,23,"12-08-22");
+Query OK, 3 rows affected (0.11 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> create table customer (customer_id int ,customer_name varchar(20),city varchar(10));
+Query OK, 0 rows affected (0.35 sec)
+
+mysql>
+mysql> insert into customer values(1,"Aman","Jammu"),(2,"Aanandi","Pune"),(3,"Tushar","Pune"),(4,"Saaniya","Mumbai");
+Query OK, 4 rows affected (0.08 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select *From customers;
+ERROR 1146 (42S02): Table 'shop.customers' doesn't exist
+mysql> select *From customer;
++-------------+---------------+--------+
+| customer_id | customer_name | city   |
++-------------+---------------+--------+
+|           1 | Aman          | Jammu  |
+|           2 | Aanandi       | Pune   |
+|           3 | Tushar        | Pune   |
+|           4 | Saaniya       | Mumbai |
++-------------+---------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select *From Orders;
++----------+-------------+------------+
+| order_id | customer_id | order_date |
++----------+-------------+------------+
+|      101 |           2 | 10-08-22   |
+|      102 |           3 | 11-08-22   |
+|      103 |          23 | 12-08-22   |
++----------+-------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> update Orders set  customer_id=4 where order_id=102;
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select *from Orders;
++----------+-------------+------------+
+| order_id | customer_id | order_date |
++----------+-------------+------------+
+|      101 |           2 | 10-08-22   |
+|      102 |           4 | 11-08-22   |
+|      103 |          23 | 12-08-22   |
++----------+-------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select Orders.order_id,customer.customer_name,customer.city,Orders.order_date from Orders Inner Join customer on Orders.customer_id=customer.customer_id;
++----------+---------------+--------+------------+
+| order_id | customer_name | city   | order_date |
++----------+---------------+--------+------------+
+|      101 | Aanandi       | Pune   | 10-08-22   |
+|      102 | Saaniya       | Mumbai | 11-08-22   |
++----------+---------------+--------+------------+
+2 rows in set (0.00 sec)
+
+mysql> select Orders.order_id,customer.customer_name,customer.city,Orders.order_date from Orders left outer Join customer on Orders.customer_id=customer.customer_id;
++----------+---------------+--------+------------+
+| order_id | customer_name | city   | order_date |
++----------+---------------+--------+------------+
+|      101 | Aanandi       | Pune   | 10-08-22   |
+|      102 | Saaniya       | Mumbai | 11-08-22   |
+|      103 | NULL          | NULL   | 12-08-22   |
++----------+---------------+--------+------------+
+3 rows in set (0.06 sec)
+
+mysql> select Orders.order_id,customer.customer_name,customer.city,Orders.order_date from Orders right  outer Join customer on Orders.customer_id=customer.customer_id;
++----------+---------------+--------+------------+
+| order_id | customer_name | city   | order_date |
++----------+---------------+--------+------------+
+|     NULL | Aman          | Jammu  | NULL       |
+|      101 | Aanandi       | Pune   | 10-08-22   |
+|     NULL | Tushar        | Pune   | NULL       |
+|      102 | Saaniya       | Mumbai | 11-08-22   |
++----------+---------------+--------+------------+
+4 rows in set (0.00 sec)
+
+
+mysql> select customer.customer_id ,customer.customer_name,Orders.order_id from customer cross join Orders on customer.customer_id=Orders.customer_id;
++-------------+---------------+----------+
+| customer_id | customer_name | order_id |
++-------------+---------------+----------+
+|           2 | Aanandi       |      101 |
+|           4 | Saaniya       |      102 |
++-------------+---------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select *from customer crossjoin Orders;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Orders' at line 1
+mysql> select *from customer cross join Orders;
++-------------+---------------+--------+----------+-------------+------------+
+| customer_id | customer_name | city   | order_id | customer_id | order_date |
++-------------+---------------+--------+----------+-------------+------------+
+|           1 | Aman          | Jammu  |      103 |          23 | 12-08-22   |
+|           1 | Aman          | Jammu  |      102 |           4 | 11-08-22   |
+|           1 | Aman          | Jammu  |      101 |           2 | 10-08-22   |
+|           2 | Aanandi       | Pune   |      103 |          23 | 12-08-22   |
+|           2 | Aanandi       | Pune   |      102 |           4 | 11-08-22   |
+|           2 | Aanandi       | Pune   |      101 |           2 | 10-08-22   |
+|           3 | Tushar        | Pune   |      103 |          23 | 12-08-22   |
+|           3 | Tushar        | Pune   |      102 |           4 | 11-08-22   |
+|           3 | Tushar        | Pune   |      101 |           2 | 10-08-22   |
+|           4 | Saaniya       | Mumbai |      103 |          23 | 12-08-22   |
+|           4 | Saaniya       | Mumbai |      102 |           4 | 11-08-22   |
+|           4 | Saaniya       | Mumbai |      101 |           2 | 10-08-22   |
++-------------+---------------+--------+----------+-------------+------------+
+12 rows in set (0.00 sec)
+mysql> select *from Orders cross join customer;
++----------+-------------+------------+-------------+---------------+--------+
+| order_id | customer_id | order_date | customer_id | customer_name | city   |
++----------+-------------+------------+-------------+---------------+--------+
+|      103 |          23 | 12-08-22   |           1 | Aman          | Jammu  |
+|      102 |           4 | 11-08-22   |           1 | Aman          | Jammu  |
+|      101 |           2 | 10-08-22   |           1 | Aman          | Jammu  |
+|      103 |          23 | 12-08-22   |           2 | Aanandi       | Pune   |
+|      102 |           4 | 11-08-22   |           2 | Aanandi       | Pune   |
+|      101 |           2 | 10-08-22   |           2 | Aanandi       | Pune   |
+|      103 |          23 | 12-08-22   |           3 | Tushar        | Pune   |
+|      102 |           4 | 11-08-22   |           3 | Tushar        | Pune   |
+|      101 |           2 | 10-08-22   |           3 | Tushar        | Pune   |
+|      103 |          23 | 12-08-22   |           4 | Saaniya       | Mumbai |
+|      102 |           4 | 11-08-22   |           4 | Saaniya       | Mumbai |
+|      101 |           2 | 10-08-22   |           4 | Saaniya       | Mumbai |
++----------+-------------+------------+-------------+---------------+--------+
+12 rows in set (0.00 sec)
+
+mysql> select customer.customer_id,customer.customer_name, Orders.order_id from Orders cross join customer;
++-------------+---------------+----------+
+| customer_id | customer_name | order_id |
++-------------+---------------+----------+
+|           1 | Aman          |      103 |
+|           1 | Aman          |      102 |
+|           1 | Aman          |      101 |
+|           2 | Aanandi       |      103 |
+|           2 | Aanandi       |      102 |
+|           2 | Aanandi       |      101 |
+|           3 | Tushar        |      103 |
+|           3 | Tushar        |      102 |
+|           3 | Tushar        |      101 |
+|           4 | Saaniya       |      103 |
+|           4 | Saaniya       |      102 |
+|           4 | Saaniya       |      101 |
++-------------+---------------+----------+
+12 rows in set (0.00 sec)
+
+mysql> select customer.customer_id,customer.customer_name, Orders.order_id from customer cross join Orders;
++-------------+---------------+----------+
+| customer_id | customer_name | order_id |
++-------------+---------------+----------+
+|           1 | Aman          |      103 |
+|           1 | Aman          |      102 |
+|           1 | Aman          |      101 |
+|           2 | Aanandi       |      103 |
+|           2 | Aanandi       |      102 |
+|           2 | Aanandi       |      101 |
+|           3 | Tushar        |      103 |
+|           3 | Tushar        |      102 |
+|           3 | Tushar        |      101 |
+|           4 | Saaniya       |      103 |
+|           4 | Saaniya       |      102 |
+|           4 | Saaniya       |      101 |
++-------------+---------------+----------+
+12 rows in set (0.00 sec)
+
+
+
+
+
+
+
