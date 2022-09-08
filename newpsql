@@ -1,0 +1,39 @@
+/*
+CREATE TABLE Borrower ( Roll_no int, Name varchar(30), DateofIssue date, NameofBook varchar(30), Status char(1));
+
+CREATE TABLE Fine (Roll_no int, Date1 date, Amt int);
+
+insert into Borrower values(1, 'Aman', '09-01-2022', 'TOC', 'I');
+
+insert into Borrower values(2, 'Himanshu', '01-01-2022', 'ML', 'I');
+
+insert into Borrower values (3, 'Saaniya', '09-06-2022', 'CN', 'I');
+
+insert into Borrower values(4, 'Ansh', '09-20-2022', 'OS', 'I');
+select * from Borrower;
+select * from Fine;
+*/
+
+DECLARE
+rollno number;
+name1 varchar(20);
+amt int;
+doi date;
+System_date date;
+no_of_days number;
+
+
+BEGIN
+
+dbms.output.put.line('Enter the Roll no and Book name');
+
+
+rollno:=:rollno;
+name1:=:name1;
+Select Sysdate into Ststem_date from dual;
+Select DateofIssue into doi from Borrower where roll_no=rollno and NameofBook=name1;
+
+
+
+
+    
