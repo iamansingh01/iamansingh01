@@ -1,0 +1,25 @@
+/*
+CREATE TABLE Borrower ( Roll_no int, Name varchar(30), DateofIssue date, NameofBook varchar(30), Status char(1));
+
+CREATE TABLE Fine (Roll_no int, Date1 date, Amt int);
+
+insert into Borrower values(1, 'Aman', '09-01-2022', 'TOC', 'I');
+
+insert into Borrower values(2, 'Himanshu', '01-01-2022', 'ML', 'I');
+
+insert into Borrower values (3, 'Saaniya', '09-06-2022', 'CN', 'I');
+
+insert into Borrower values(4, 'Ansh', '09-20-2022', 'OS', 'I');
+select * from Borrower;
+select * from Fine;
+*/
+
+DECLARE
+rollno number;
+name1 varchar(20);
+amt int;
+doi date;
+    roll_number number :=: roll_no;
+
+BEGIN
+    dbms.output_put_line(
