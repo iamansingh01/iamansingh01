@@ -1,0 +1,17 @@
+create table area_valuet(area float , radius float);
+Declare 
+radius number ;
+i number;
+area float;
+BEGIN
+for i in 5..8 loop
+radius:=i;
+area:=3.14*radius*radius;
+insert into area_valuet values (radius,area);
+dbms_output.put_line('Area = '||area);
+END loop;
+select *from area_valuet;
+
+END;
+/
+
