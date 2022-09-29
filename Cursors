@@ -1,0 +1,434 @@
+create table o_rollcall(rno int , name varchar(20),status varchar(30));
+
+insert into o_rollcall values(1,'sam','present');
+insert into o_rollcall values(3,'kiya','present');
+insert into o_rollcall values(5,'nivi','present');
+insert into o_rollcall values(2,'riya','present');
+insert into o_rollcall values(17'nisha','present');
+
+implicit cursor
+begin
+update o_rollcall set status='Abset' where rno=1;
+if sql%found then
+dbms_output.put_line('updated');
+end if;
+if sql%notfound then
+dbms_output.put_line('Not updated  - not found');
+end if;
+if sql%rowcount>0 then 
+dbms_output.put_line(sql%rowcount||'rowsupdated');
+else
+dbms_output.put_line('No rows updated');
+end if;
+end;
+/
+
+explicit cursor
+
+declare
+cursor explicit_cur is select rno,name,status from o_rollcall where status='present';
+tmp explicit_cur%rowtype;
+begin
+open explicit_cur;
+loop exit when explicit_cur%notfound;
+fetch explicit_cur into tmp;
+dbms_output.put_line('    RollNo:      '|| tmp.rno || '     NAME:      '|| tmp.name ||'         STATUS:      '||tmp.status);
+ end loop;
+ if explicit_cur%rowcount>0 then
+ dbms_output.put_line(explicit_cur%rowcount||'rows found');
+ else
+ dbms_output.put_line('No rows found');
+ end if;
+ close explicit_cur;
+ end;
+ /
+ 
+ For loop cursor 
+ declare
+ cursor for_cur is select rno,name,status from o_rollcall where status='present';
+ tmp for_cur%rowtype;
+ begin
+ for tmp in for_cur
+ loop
+ dbms_output.put_line('  ROLLNO:    '||tmp.rno||''||' NAME   '||tmp.name||''||'  STATUS:  '||tmp.status);
+ end loop;
+ end;
+ /
+ 
+ 
+ PARAMETERIZED CURSOR
+
+declare
+roll number;
+cursor param_cur(roll number) is selected * from o_rollcall wher rno=roll;
+tmp param_cur&rowtype;
+begin
+roll:=&roll;
+for tmp in param_cur(roll) loop
+
+ 
+ 
+ubuntu@ubuntu-OptiPlex-5000:~$ sqlplus
+
+SQL*Plus: Release 11.2.0.2.0 Production on Wed Sep 28 12:10:34 2022
+
+Copyright (c) 1982, 2011, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password: 
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+SQL> set serveroutput on      
+SQL> insert into o_rollcall values(1,'sam','present');
+insert into o_rollcall values(1,'sam','present')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> create table o_rollcall(rno int , name varchar(20),status varchar(30));
+
+Table created.
+
+SQL> insert into o_rollcall values(1,'sam','present');
+
+1 row created.
+
+SQL> insert into o_rollcall values(3,'kiya','present');
+
+1 row created.
+
+SQL> insert into o_rollcall values(5,'nivi','present');
+
+1 row created.
+
+SQL> insert into o_rollcall values(2,'riya','present');
+
+1 row created.
+ubuntu@ubuntu-OptiPlex-5000:~$ rlwrap sqlplus
+
+SQL*Plus: Release 11.2.0.2.0 Production on Wed Sep 28 12:29:19 2022
+
+Copyright (c) 1982, 2011, Oracle.  All rights reserved.
+
+system
+Enter password: 
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+begin
+update o_rollcall set status='Abset' where rno=1;
+  3  if sql%found then
+dbms_output.put_line('updated');
+end if;
+  6  if sql%notfound then
+dbms_output.put_line('Not updated  - not found');
+end if;
+  9  if sql%rowcount>0 then 
+dbms_output.put_line(sql%rowcount||'rowsupdated');
+ 11  else
+dbms_output.put_line('No rows updated');
+end if;
+ 14  end;
+/
+
+PL/SQL procedure successfully completed.
+
+select * from o_rollcall;
+
+       RNO NAME 		STATUS
+---------- -------------------- ------------------------------
+	 1 sam			Abset
+	 3 kiya 		present
+	 5 nivi 		present
+	 2 riya 		present
+
+declare
+cursor explicit_cur is select rno,name,status from o_rollcall where status='present';
+tmp explicit_cur%rowtype;
+begin
+open explicit_cur;
+loop exit when explicit_cur%notfound;
+  7  fetch explicit_cur into tmp;
+dbms_output.put_line('    RollNo:      '|| tmp.rno || '     NAME:      '||'         STATUS:      '||tmp.status);
+ end loop;
+ 10   if explicit_cur%rowcount>0 then
+ dbms_output.put_line(explicit_cur%rowcount||'rows found');
+ 12   else
+ dbms_output.put_line('No rows found');
+ end if;
+ close explicit_cur;
+ 16   end;
+ /
+
+PL/SQL procedure successfully completed.
+
+select * from o_rollcall;
+
+       RNO NAME 		STATUS
+---------- -------------------- ------------------------------
+	 1 sam			Abset
+	 3 kiya 		present
+	 5 nivi 		present
+	 2 riya 		present
+PL/SQL procedure successfully completed.
+
+     declare
+  2  cursor explicit_cur is select rno,name,status from o_rollcall where status='present';
+  3  tmp explicit_cur%rowtype;
+  4  begin
+  5  open explicit_cur;
+  6  loop exit when explicit_cur%notfound;
+  7  fetch explicit_cur into tmp;
+  8  dbms_output.put_line('    RollNo:      '|| tmp.rno || '     NAME:      '|| tmp.name ||'         STATUS:      '||tmp.status);
+  9   end loop;
+ 10   if explicit_cur%rowcount>0 then
+ 11   dbms_output.put_line(explicit_cur%rowcount||'rows found');
+ 12   else
+ 13   dbms_output.put_line('No rows found');
+ 14   end if;
+ 15   close explicit_cur;
+ 16   end;
+ 17   /
+RollNo:      3	   NAME:      kiya	   STATUS:	present
+RollNo:      5	   NAME:      nivi	   STATUS:	present
+RollNo:      2	   NAME:      riya	   STATUS:	present
+RollNo:      2	   NAME:      riya	   STATUS:	present
+3rows found
+
+declare
+ cursor for_cur is select rno,name,status from o_rollcall where status='present';
+ tmp for_cur%rowtype;
+ begin
+ for tmp in for_cur
+  6   loop
+ dbms_output.put_line('  ROLLNO:    '||tmp.rno||''||' NAME   '||tmp.name||''||'  STATUS:  '||tmp.status);
+ end loop;
+  9   end;
+ /
+ROLLNO:    3 NAME   kiya  STATUS:  present
+ROLLNO:    5 NAME   nivi  STATUS:  present
+ROLLNO:    2 NAME   riya  STATUS:  present
+
+PL/SQL procedure successfully completed.
+create table o_rollcall(rno int , name varchar(20),status varchar(30));
+
+insert into o_rollcall values(1,'sam','present');
+insert into o_rollcall values(3,'kiya','present');
+insert into o_rollcall values(5,'nivi','present');
+insert into o_rollcall values(2,'riya','present');
+insert into o_rollcall values(17'nisha','present');
+
+implicit cursor
+begin
+update o_rollcall set status='Abset' where rno=1;
+if sql%found then
+dbms_output.put_line('updated');
+end if;
+if sql%notfound then
+dbms_output.put_line('Not updated  - not found');
+end if;
+if sql%rowcount>0 then 
+dbms_output.put_line(sql%rowcount||'rowsupdated');
+else
+dbms_output.put_line('No rows updated');
+end if;
+end;
+/
+
+explicit cursor
+
+declare
+cursor explicit_cur is select rno,name,status from o_rollcall where status='present';
+tmp explicit_cur%rowtype;
+begin
+open explicit_cur;
+loop exit when explicit_cur%notfound;
+fetch explicit_cur into tmp;
+dbms_output.put_line('    RollNo:      '|| tmp.rno || '     NAME:      '|| tmp.name ||'         STATUS:      '||tmp.status);
+ end loop;
+ if explicit_cur%rowcount>0 then
+ dbms_output.put_line(explicit_cur%rowcount||'rows found');
+ else
+ dbms_output.put_line('No rows found');
+ end if;
+ close explicit_cur;
+ end;
+ /
+ 
+ For loop cursor 
+ declare
+ cursor for_cur is select rno,name,status from o_rollcall where status='present';
+ tmp for_cur%rowtype;
+ begin
+ for tmp in for_cur
+ loop
+ dbms_output.put_line('  ROLLNO:    '||tmp.rno||''||' NAME   '||tmp.name||''||'  STATUS:  '||tmp.status);
+ end loop;
+ end;
+ /
+ 
+ 
+ PARAMETERIZED CURSOR
+
+declare
+roll number;
+cursor param_cur(roll number) is selected * from o_rollcall wher rno=roll;
+tmp param_cur&rowtype;
+begin
+roll:=&roll;
+for tmp in param_cur(roll) loop
+
+ 
+ 
+ubuntu@ubuntu-OptiPlex-5000:~$ sqlplus
+
+SQL*Plus: Release 11.2.0.2.0 Production on Wed Sep 28 12:10:34 2022
+
+Copyright (c) 1982, 2011, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password: 
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+SQL> set serveroutput on      
+SQL> insert into o_rollcall values(1,'sam','present');
+insert into o_rollcall values(1,'sam','present')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> create table o_rollcall(rno int , name varchar(20),status varchar(30));
+
+Table created.
+
+SQL> insert into o_rollcall values(1,'sam','present');
+
+1 row created.
+
+SQL> insert into o_rollcall values(3,'kiya','present');
+
+1 row created.
+
+SQL> insert into o_rollcall values(5,'nivi','present');
+
+1 row created.
+
+SQL> insert into o_rollcall values(2,'riya','present');
+
+1 row created.
+ubuntu@ubuntu-OptiPlex-5000:~$ rlwrap sqlplus
+
+SQL*Plus: Release 11.2.0.2.0 Production on Wed Sep 28 12:29:19 2022
+
+Copyright (c) 1982, 2011, Oracle.  All rights reserved.
+
+system
+Enter password: 
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+begin
+update o_rollcall set status='Abset' where rno=1;
+  3  if sql%found then
+dbms_output.put_line('updated');
+end if;
+  6  if sql%notfound then
+dbms_output.put_line('Not updated  - not found');
+end if;
+  9  if sql%rowcount>0 then 
+dbms_output.put_line(sql%rowcount||'rowsupdated');
+ 11  else
+dbms_output.put_line('No rows updated');
+end if;
+ 14  end;
+/
+
+PL/SQL procedure successfully completed.
+
+select * from o_rollcall;
+
+       RNO NAME 		STATUS
+---------- -------------------- ------------------------------
+	 1 sam			Abset
+	 3 kiya 		present
+	 5 nivi 		present
+	 2 riya 		present
+
+declare
+cursor explicit_cur is select rno,name,status from o_rollcall where status='present';
+tmp explicit_cur%rowtype;
+begin
+open explicit_cur;
+loop exit when explicit_cur%notfound;
+  7  fetch explicit_cur into tmp;
+dbms_output.put_line('    RollNo:      '|| tmp.rno || '     NAME:      '||'         STATUS:      '||tmp.status);
+ end loop;
+ 10   if explicit_cur%rowcount>0 then
+ dbms_output.put_line(explicit_cur%rowcount||'rows found');
+ 12   else
+ dbms_output.put_line('No rows found');
+ end if;
+ close explicit_cur;
+ 16   end;
+ /
+
+PL/SQL procedure successfully completed.
+
+select * from o_rollcall;
+
+       RNO NAME 		STATUS
+---------- -------------------- ------------------------------
+	 1 sam			Abset
+	 3 kiya 		present
+	 5 nivi 		present
+	 2 riya 		present
+PL/SQL procedure successfully completed.
+
+     declare
+  2  cursor explicit_cur is select rno,name,status from o_rollcall where status='present';
+  3  tmp explicit_cur%rowtype;
+  4  begin
+  5  open explicit_cur;
+  6  loop exit when explicit_cur%notfound;
+  7  fetch explicit_cur into tmp;
+  8  dbms_output.put_line('    RollNo:      '|| tmp.rno || '     NAME:      '|| tmp.name ||'         STATUS:      '||tmp.status);
+  9   end loop;
+ 10   if explicit_cur%rowcount>0 then
+ 11   dbms_output.put_line(explicit_cur%rowcount||'rows found');
+ 12   else
+ 13   dbms_output.put_line('No rows found');
+ 14   end if;
+ 15   close explicit_cur;
+ 16   end;
+ 17   /
+RollNo:      3	   NAME:      kiya	   STATUS:	present
+RollNo:      5	   NAME:      nivi	   STATUS:	present
+RollNo:      2	   NAME:      riya	   STATUS:	present
+RollNo:      2	   NAME:      riya	   STATUS:	present
+3rows found
+
+declare
+ cursor for_cur is select rno,name,status from o_rollcall where status='present';
+ tmp for_cur%rowtype;
+ begin
+ for tmp in for_cur
+  6   loop
+ dbms_output.put_line('  ROLLNO:    '||tmp.rno||''||' NAME   '||tmp.name||''||'  STATUS:  '||tmp.status);
+ end loop;
+  9   end;
+ /
+ROLLNO:    3 NAME   kiya  STATUS:  present
+ROLLNO:    5 NAME   nivi  STATUS:  present
+ROLLNO:    2 NAME   riya  STATUS:  present
+
+PL/SQL procedure successfully completed.
+
+
