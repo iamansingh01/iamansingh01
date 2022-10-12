@@ -1,0 +1,57 @@
+test> show dbs
+admin   40.00 KiB
+config  60.00 KiB
+db1     80.00 KiB
+local   72.00 KiB
+test> show collection
+MongoshInvalidInputError: [COMMON-10001] 'collection' is not a valid argument for "show".
+test> show collection;
+MongoshInvalidInputError: [COMMON-10001] 'collection' is not a valid argument for "show".
+test> show collections
+
+test> db.createCollection('Aman')
+{ ok: 1 }
+test> db.Aman.insertOne({"b_id":01,"name":"SE1"});
+{
+  acknowledged: true,
+  insertedId: ObjectId("634663d643097fba1f4680fa")
+}
+test> db.Aman.insertOne({"b_id":02,"name":"SE2"});
+{
+  acknowledged: true,
+  insertedId: ObjectId("6346642443097fba1f4680fb")
+}
+test> db.Aman.insertOne({"b_id":03,"name":"SE3"});
+{
+  acknowledged: true,
+  insertedId: ObjectId("6346643243097fba1f4680fc")
+}
+test> db.Aman.find()
+[
+  { _id: ObjectId("634663d643097fba1f4680fa"), b_id: 1, name: 'SE1' },
+  { _id: ObjectId("6346642443097fba1f4680fb"), b_id: 2, name: 'SE2' },
+  { _id: ObjectId("6346643243097fba1f4680fc"), b_id: 3, name: 'SE3' }]
+
+test> db.Aman.update({"name":"SE1"},{$Set:{"name":"SE A"}})
+MongoServerError: Unknown modifier: $Set. Expected a valid update modifier or pipeline-style update specified as an array
+test> db.Aman.update({"name":"SE1"},{$set:{"name":"SE A"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+test> db.Aman.find()
+[
+  { _id: ObjectId("634663d643097fba1f4680fa"), b_id: 1, name: 'SE A' },
+  { _id: ObjectId("6346642443097fba1f4680fb"), b_id: 2, name: 'SE2' },
+  { _id: ObjectId("6346643243097fba1f4680fc"), b_id: 3, name: 'SE3' }
+]
+test> db.Aman.remove({"b_id":02})
+DeprecationWarning: Collection.remove() is deprecated. Use deleteOne, deleteMany, findOneAndDelete, or bulkWrite.
+{ acknowledged: true, deletedCount: 1 }
+test> db.Aman.find()
+[
+  { _id: ObjectId("634663d643097fba1f4680fa"), b_id: 1, name: 'SE A' },
+  { _id: ObjectId("6346643243097fba1f4680fc"), b_id: 3, name: 'SE3' }
