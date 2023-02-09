@@ -1,0 +1,58 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Graph {
+  private int numVertices;
+  private List<Integer>[] adjacencyList;
+
+  Graph(int numVertices) {
+    this.numVertices = numVertices;
+    this.adjacencyList = new ArrayList[numVertices];
+
+    for (int i = 0; i < numVertices; i++) {
+      adjacencyList[i] = new ArrayList<>();
+    }
+  }
+
+  public void addEdge(int source, int destination) {
+    adjacencyList[source].add(destination);
+  }
+
+  public void DFS(int vertex, boolean[] visited) {
+    visited[vertex] = true;
+    System.out.print(vertex + " ");
+
+    for (int i : adjacencyList[vertex]) {
+      if (!visited[i]) {
+        DFS(i, visited);
+      }
+    }
+  }
+}
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner input = new Scanner(System.in);
+    System.out.print("Enter the number of vertices in the graph: ");
+    int numVertices = input.nextInt();
+    Graph graph = new Graph(numVertices);
+
+    System.out.print("Enter the number of edges: ");
+    int numEdges = input.nextInt();
+
+    System.out.println("Enter the edges (source destination): ");
+    for (int i = 0; i < numEdges; i++) {
+      int source = input.nextInt();
+      int destination = input.nextInt();
+      graph.addEdge(source, destination);
+    }
+
+    System.out.print("Enter the starting vertex for the DFS: ");
+    int startVertex = input.nextInt();
+
+    boolean[] visited = new boolean[numVertices];
+    graph.DFS(startVertex, visited);
+  }
+}
+
