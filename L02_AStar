@@ -1,0 +1,149 @@
+import java.util.Scanner;
+import java.util.PriorityQueue;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.List;
+import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Main{
+        public static void main(String[] args){
+                Scanner sc = new Scanner(System.in);
+                System.out.println("Enter the number of nodes in the graph: ");
+                int n = sc.nextInt();
+                Node[] nodes = new Node[n];
+                for(int i = 0; i < n; i++){
+                        System.out.println("Enter the name of node " + (i+1) + ": ");
+                        String name = sc.next();
+                        System.out.println("Enter the heuristic score of node " + (i+1) + ": ");
+                        int hScore = sc.nextInt();
+                        nodes[i] = new Node(name, hScore);
+                }
+
+                for(int i = 0; i < n; i++){
+                        System.out.println("Enter the number of edges for node " + nodes[i].name + ": ");
+                        int e = sc.nextInt();
+                        nodes[i].adjacencies = new Edge[e];
+                        for(int j = 0; j < e; j++){
+                                System.out.println("Enter the name of the node that node " + nodes[i].name + " is connected to: ");
+                                String endNode = sc.next();
+                                Node end = null;
+                                for(int k = 0; k < n; k++){
+                                        if(nodes[k].name.equals(endNode)){
+                                                end = nodes[k];
+                                                break;
+                                        }
+                                }
+                                System.out.println("Enter the cost of the edge between node " + nodes[i].name + " and node " + endNode + ": ");
+                                int cost = sc.nextInt();
+                                nodes[i].adjacencies[j] = new Edge(end, cost);
+                        }
+                }
+
+                System.out.println("Enter the name of the starting node: ");
+                String startNode = sc.next();
+                System.out.println("Enter the name of the target node: ");
+                String targetNode = sc.next();
+                Node start = null;
+                Node target = null;
+                for(int i = 0; i < n; i++){
+                        if(nodes[i].name.equals(startNode)){
+                                start = nodes[i];
+                        }
+                        if(nodes[i].name.equals(targetNode)){
+                                target = nodes[i];
+                        }
+                        if(start != null && target != null){
+                                break;
+                        }
+                }
+
+                AstarSearch(start, target);
+
+              
+
+                 List<Node> path = printPath(target);
+                 System.out.println("Path: " + path);
+        }
+
+        public static List<Node> printPath(Node target){
+                List<Node> path = new ArrayList<>();
+                for(Node node = target; node != null; node = node.parent){
+                path.add(node);
+                }
+                Collections.reverse(path);
+                return path;
+                }
+                
+            public static void AstarSearch(Node start, Node goal){
+            Set<Node> explored = new HashSet<>();
+            PriorityQueue<Node> queue = new PriorityQueue<>(new Comparator<Node>(){
+                    public int compare(Node i, Node j){
+                            return (i.fScore() <= j.fScore())? -1 : 1;
+                    }
+            });
+            start.gScore = 0;
+            queue.add(start);
+            boolean found = false;
+            while((!queue.isEmpty()) && (!found)){
+                    Node current = queue.poll();
+                    explored.add(current);
+                    if(current.name.equals(goal.name)){
+                            found = true;
+                    }
+                    for(Edge e : current.adjacencies){
+                            Node child = e.end;
+                            double cost = e.cost;
+                            double tempGScore = current.gScore + cost;
+                            double tempFScore = tempGScore + child.hScore;
+                            if((explored.contains(child)) && (tempFScore >= child.fScore())){
+                                    continue;
+                            }
+                            else if((!queue.contains(child)) || (tempFScore < child.fScore())){
+                                    child.parent = current;
+                                    child.gScore = tempGScore;
+                                    if(queue.contains(child)){
+                                            queue.remove(child);
+                                    }
+                                    queue.add(child);
+                            }
+                    }
+            }
+    }
+
+    static class Node{
+            String name;
+            Edge[] adjacencies;
+            double hScore;
+            double gScore = Double.MAX_VALUE;
+            Node parent;
+
+            public Node(String name, int hScore){
+                    this.name = name;
+                    this.hScore = hScore;
+            }
+
+            public double fScore(){
+                    return gScore + hScore;
+            }
+             public String toString(){
+                return name;
+        }
+    }
+
+    static class Edge{
+            Node end;
+            double cost;
+
+            public Edge(Node end, double cost){
+                    this.end = end;
+                    this.cost = cost;
+            }
+    }
+    
+}
+
+
+
+
