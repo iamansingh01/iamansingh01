@@ -1,0 +1,25 @@
+import pandas as pd
+
+import numpy as np
+
+df=pd.read_csv("/home/ubuntu/Downloads/StudentsPerformanceTest1.csv")
+
+df
+
+df.isnull
+
+series=pd.isnull(df["math score"])
+
+df[series]
+
+df.notnull()
+
+from sklearn import preprocessing
+le = preprocessing.LabelEncoder()
+
+df['gender']=le.fit_transform(df['gender'])
+
+newdf=df
+
+df
+
