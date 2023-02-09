@@ -1,0 +1,58 @@
+//BFS RECURSION
+
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Graph {
+  int V;
+  ArrayList<ArrayList<Integer>> adj;
+
+  Graph(int V) {
+    this.V = V;
+    adj = new ArrayList<>(V);
+    for (int i = 0; i < V; i++)
+      adj.add(new ArrayList<>());
+  }
+
+  void addEdge(int v, int w) {
+    adj.get(v).add(w);
+  }
+
+  void BFS(int s) {
+    boolean[] visited = new boolean[V];
+    BFSUtil(s, visited);
+  }
+
+  void BFSUtil(int v, boolean[] visited) {
+    System.out.print(v + " ");
+    visited[v] = true;
+    for (Integer i : adj.get(v)) {
+      if (!visited[i]) {
+        BFSUtil(i, visited);
+      }
+    }
+  }
+}
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Enter number of vertices: ");
+    int V = sc.nextInt();
+    Graph g = new Graph(V);
+    System.out.println("Enter number of edges: ");
+    int E = sc.nextInt();
+    System.out.println("Enter edges: ");
+    for (int i = 0; i < E; i++) {
+      int v = sc.nextInt();
+      int w = sc.nextInt();
+      g.addEdge(v, w);
+    }
+    System.out.println("Enter source vertex: ");
+    int s = sc.nextInt();
+    System.out.println("BFS starting from vertex " + s + ": ");
+    g.BFS(s);
+  }
+}
+
