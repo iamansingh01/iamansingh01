@@ -1,0 +1,43 @@
+mapi={'Male':1,'Female':0}
+df=df.replace(mapi)
+df.head()
+
+#Train Test Split
+x,y=df.drop(['Purchased'],axis=1),df['Purchased']
+
+# train_test split
+from sklearn.model_selection import train_test_split
+xtrain,xtest,ytrain,ytest=train_test_split(x,y,test_size=0.25,random_state=0)
+
+print(xtrain.shape)
+print(xtest.shape)
+print(ytrain.shape)
+print(ytest.shape)
+
+# standrd scaler
+from sklearn.preprocessing import StandardScaler
+sc_scale=StandardScaler()
+xtrain=sc_scale.fit_transform(xtrain)
+xtest=sc_scale.transform(xtest)
+
+# Logistic regression model is build 
+from sklearn.linear_model import LogisticRegression
+classifier=LogisticRegression()
+classifier.fit(xtrain,ytrain)
+
+y_pred=classifier.predict(xtest)
+
+# importing confusion matrix and displaying it for data
+from sklearn.metrics import confusion_matrix
+cm=confusion_matrix(ytest,y_pred)
+print("Confusion matrix : \n",cm)
+
+# confusion matrix using heatmap of seaborn library
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.heatmap(cm,annot=True)
+plt.show()
+
+# Accuracy of the model
+from sklearn.metrics import accuracy_score
+print("Accuracy is :",accuracy_score(ytest,y_pred)*100,'%')

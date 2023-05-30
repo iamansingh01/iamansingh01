@@ -1,0 +1,68 @@
+import nltk
+from nltk import word_tokenize
+text="We need to Tokenize this text and perform the given Activities"
+
+#lower case
+text=text.lower()
+print(text)
+
+#Tokenize
+print(nltk.word_tokenize(text))
+
+#StopWords Removal
+from nltk.corpus import stopwords
+stop_word= set(stopwords.words('english'))
+words=word_tokenize(text)
+filtered_words=[word for word in words if word.lower() not in stop_word]
+       
+filtered_text=" ".join(filtered_words)
+print(filtered_text)
+
+# Stemming
+from nltk.stem import PorterStemmer
+porter=PorterStemmer()
+print(porter.stem(text))
+
+#Lemmatizing
+import nltk
+nltk.download("wordnet")
+from nltk.stem import WordNetLemmatizer
+lemmatizer=WordNetLemmatizer()
+
+text=nltk.word_tokenize(text)
+filtered_words=word_tokenize(filtered_text)
+lemmatized_words=[lemmatizer.lemmatize(word, pos='v') for word in filtered_words]
+filtered_text=" ".join(filtered_words)
+print(filtered_text)
+
+#tf/idf
+import re
+import string
+# assign documents
+d0 = 'This is document 1'
+d1 = 'Document 2'
+d2 = 'and Document 3'
+
+# merge documents into a single corpus
+string = [d0, d1, d2]
+# import required module
+
+# create object
+tfidf = TfidfVectorizer()
+
+# get tf-df values
+result = tfidf.fit_transform(string)
+
+# get indexing
+print('\nWord indexes:')
+print(tfidf.vocabulary_)
+
+# display tf-idf values
+print('\ntf-idf value:')
+print(result)
+
+# in matrix form
+print('\ntf-idf values in matrix form:')
+print(result.toarray())
+
+

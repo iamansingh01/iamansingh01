@@ -1,0 +1,39 @@
+#Train test split
+x,y=df.drop(['Purchased'],axis=1),df['Purchased']
+from sklearn.model_selection import train_test_split
+xtrain,xtest,ytrain,ytest=train_test_split(x,y,test_size=0.25,random_state=0)
+
+#Standard scaler
+from sklearn.preprocessing import StandardScaler
+sc_scale=StandardScaler()
+xtrain=sc_scale.fit_transform(xtrain)
+xtest=sc_scale.transform(xtest)
+
+from sklearn.naive_bayes import GaussianNB
+classifier=GaussianNB()
+classifier.fit(xtrain,ytrain)
+
+y_pred=classifier.predict(xtest)
+
+#confusion matrix
+from sklearn.metrics import confusion_matrix
+cm=confusion_matrix(ytest,y_pred)
+print("Confusion matrix is : \n",cm)
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.heatmap(cm,annot=True)
+plt.show()
+
+from sklearn.metrics import accuracy_score
+print("Accuracy :", accuracy_score(ytest,y_pred)*100,'%')
+
+#precision  tp/(tp+fp)
+precision=precision_score(ytest,y_pred)
+print('Precision: %f' % precision)
+#recall  tp/(tp+fn)
+recall=recall_score(ytest,y_pred)
+print('recall: %f' % recall)
+#precision  2tp/(2tp+fp+fn)
+f1=f1_score(ytest,y_pred)
+print('f1: %f' % f1)

@@ -1,0 +1,20 @@
+df=pd.read_csv("covid_vaccine_statewise.csv")
+
+
+avg_firstdose=df['First Dose Administered'].mean(axis=0)
+print("the average of first dose is :",avg_firstdose)
+
+avg_seconddose=df['Second Dose Administered'].mean(axis=0)
+print("the average os second dose is :",avg_seconddose)
+
+first_dose=df.groupby('State')[['First Dose Administered']].sum()
+first_dose
+
+second_dose=df.groupby('State')[['Second Dose Administered']].sum()
+second_dose
+
+male=df['Male (Doses Administered)'].sum()
+int(male)
+
+female=df['Female (Doses Administered)'].sum()
+int(female)

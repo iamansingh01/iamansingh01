@@ -1,0 +1,45 @@
+df=pd.read_csv('movie.csv')
+
+sns.countplot(df['vote_count'])
+plt.title('Distribution of vote counts')
+plt.show()
+
+sns.countplot(data=df,x='vote_count')
+plt.title('Distribution of vote counts')
+plt.show()sns.boxplot(df['popularity'])
+
+plt.hist(df['popularity'],bins=10)
+plt.xlabel('popularity')
+plt.ylabel('frequency')
+plt.title('distribution of movie popularity')
+plt.show()
+x=df[['popularity']]
+y=df['vote_count']
+from sklearn.model_selection import train_test_split
+xtrain,xtest,ytrain,ytest=train_test_split(x,y,test_size=0.25,random_state=0)
+print(xtrain)
+print(xtest)
+
+from sklearn.preprocessing import StandardScaler
+sc_scale=StandardScaler()
+xtrain=sc_scale.fit_transform(xtrain)
+xtest=sc_scale.transform(xtest)
+from sklearn.linear_model import LogisticRegression
+classifier=LogisticRegression()
+classifier.fit(xtrain,ytrain)
+
+ypred=classifier.predict(xtest)
+correlation_matrix=df.corr()
+print('the correlation matrix is:',correlation_matrix)
+
+from sklearn.metrics import confusion_matrix
+cm=confusion_matrix(ypred,ytest)
+print('confusion matrix is:',cm)
+
+from sklearn.metrics import accuracy_score
+print('the accuracy is:',accuracy_score(ypred,ytest)*100,'%')
+
+top_movies = df.nlargest(10, 'popularity')
+
+best_movies=top_movies[['title','popularity','overview']]
+print(best_movies)
