@@ -1,6 +1,7 @@
-- 👋 Hi, I’m Aman Singh
+ <div class="profile">
+        <h1>Hello, I'm AMAN SINGH ✌️</h1>
+        <p>Passionate Computer Engineer 💻 | Coding Enthusiast 🚀</p>
+        <p>Email: iamansingh02@gmail.com 📧</p>
+        <p>LinkedIn: <a href="https://www.linkedin.com/in/aman-singh-61157b227/">LinkedIn Profile</a> 🔗</p>
+ </div>
 
-<!---
-iamansingh01/iamansingh01 is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
